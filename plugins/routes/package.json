@@ -1,0 +1,14 @@
+{
+  "name": "lumme-ui-routes",
+  "version": "0.0.1",
+  "description": "Connect routes for lumme UI",
+  "main": "index.js",
+  "plugin": {
+    "provides": [
+      "lumme-ui-routes"
+    ],
+    "consumes": [
+      "logger"
+    ]
+  }
+}
