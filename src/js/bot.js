@@ -151,7 +151,7 @@
             duration = $(animationInput).attr('data-duration') ? parseInt($(animationInput).attr('data-duration')) : 500;
             animationPromise = animationPromise.then(() => { 
               return $(document).viksu('look', where, duration).then(() => {
-                $(document).viksu('look', 'default', 200);
+                return $(document).viksu('look', 'default', 200);
               }); 
             });
           break;            
