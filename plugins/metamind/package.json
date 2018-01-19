@@ -1,0 +1,14 @@
+{
+  "name": "metamind-client",
+  "version": "0.0.1",
+  "description": "metamind-functions",
+  "main": "index.js",
+  "plugin": {
+    "provides": [
+      "metamind-client"
+    ],
+    "consumes": [
+      "logger"
+    ]
+  }
+}

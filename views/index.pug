@@ -3,11 +3,33 @@ extends layout/layout
 block custom-head
   title 
     = __('index.title')
+  link(rel='stylesheet', href='https://cdn.metatavu.io/libs/flatpickr/4.0.6/flatpickr.min.css')
   link(rel='stylesheet', href='/css/index.min.css')
-  script(defer='defer',src='https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js',type='text/javascript')
-  
-  script(defer='defer',src='/js/pug-templates.min.js',type='text/javascript')
-  script(defer='defer',src='//cdn.metatavu.io/libs/moment/2.17.1/moment.js',type='text/javascript')
-  script(defer='defer',src='/js/index.min.js',type='text/javascript')
+  script(defer='defer', src='https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js',type='text/javascript')
+  script(defer='defer', type='text/javascript', src='https://cdn.metatavu.io/libs/flatpickr/4.0.6/flatpickr.min.js')
+  script(defer='defer', type='text/javascript', src='https://cdn.metatavu.io/libs/flatpickr/4.0.6/l10n/fi.js')
+  script(defer='defer', src='/js/pug-templates.min.js',type='text/javascript')
+  script(defer='defer', src='//cdn.metatavu.io/libs/moment/2.17.1/moment.js',type='text/javascript')
+  script(defer='defer', src='/js/bot.min.js',type='text/javascript')
+  script(defer='defer', src='/js/index.min.js',type='text/javascript')
 block body
-  !=svgData
+  // !=svgData
+  main.container(role='main')
+    h1.main-heading.text-center Viksu, Lumme Energian sähköttäjä
+    .row
+      .col-md-3
+        img.viksu-img(src="/gfx/viksu.svg")
+      .col-md
+        .chat-container
+          .discussion-container
+        .bot-typing-container
+          .bot-typing.float-right
+            img(src='gfx/typing.svg')
+            | Viksu kirjoittaa...
+        .quick-responses
+        .input-group.send-message-bar
+          input.form-control.user-text-input(type='text', placeholder="Kirjoita jotain")
+          input.form-control.user-date-input(type='text', style='display: none')
+          .input-group-append
+            button.btn.btn-lumme.send-message-btn(type='button') Lähetä
+          small.bot-hint-text.form-text.text-muted
