@@ -318,8 +318,8 @@
           derived[derivedSelector] = this.options.derived[derivedSelector];
         });
             
-        Snap.animate(0, 100, (progress) => { 
-          if (progress % 2 == 1) {
+        Snap.animate(0, 1000, (progress) => {
+          if (progress % 1 == 0) {
             this.updateConnections(derived);
           }
         }, duration);
