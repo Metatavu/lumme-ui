@@ -375,11 +375,12 @@
       const transform = Snap.parseTransformString(element.attr('transform'));
       const x = element.transform().globalMatrix.x(0, 0);
       const y = element.transform().globalMatrix.y(0, 0);
+      const layerOffset = this.getLayerOffset();
       
       return path.map((segment) => {
         if (segment.indexOf('m') === 0) {
-          segment[1] += x;
-          segment[2] += y;
+          segment[1] += x - layerOffset.x;
+          segment[2] += y - layerOffset.y;
           return segment;
         }
         
@@ -421,18 +422,20 @@
     getAbsoluteCenter: function (element) {
       const transform = element.transform();
       const bbox = element.getBBox();
+      const layerOffset = this.getLayerOffset();
       
       return {
-        x: element.transform().globalMatrix.x(bbox.cx, bbox.cy),
-        y: element.transform().globalMatrix.y(bbox.cx, bbox.cy)
+        x: element.transform().globalMatrix.x(bbox.cx, bbox.cy) - layerOffset.x,
+        y: element.transform().globalMatrix.y(bbox.cx, bbox.cy) - layerOffset.y
       };
     },
     
-    getLayerOffsets: function () {
-      const bbox = Snap.select('#layer1').getBBox();
+    getLayerOffset: function () {
+      const layer = Snap.select('#layer1');
+      
       return {
-        x: bbox.cx(),
-        y: bbox.cy()
+        x: layer.transform().globalMatrix.x(0, 0),
+        y: layer.transform().globalMatrix.y(0, 0)
       };
     }
     
