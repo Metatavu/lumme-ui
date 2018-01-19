@@ -11,6 +11,7 @@ const architectConfig = [
       }
     }
   },
+  "./plugins/metamind",
   "./plugins/routes"
 ];
 

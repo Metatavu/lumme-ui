@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+@import "fonts";
+@import "colors";
+
+body {
+  background-color: $background;
+}
+.top-logo {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 25px;
+  padding-bottom: 30px;
+}
+.bg-black {
+  background-color: $black;
+}
+
+.btn {
+  &.btn-lumme {
+    color: $button-text;
+    background-color: $button-background;
+    border-radius: 0;
+    border: 0;
+    
+    &:hover {
+      color: $button-text-hover;
+      background-color: $button-background-hover;
+    }
+  }
+}

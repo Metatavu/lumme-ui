@@ -3,6 +3,10 @@
 (() => {
   'use strict';
   
+  const config = require('nconf');
+  config.file({file: __dirname + '/config.json'});
+  console.log(config.get('metamind'));
+  
   const architect = require('architect');
   const _ = require('lodash');
   const http = require('http');
@@ -10,11 +14,9 @@
   const path = require('path');
   const express = require('express');
   const request = require('request');
-  const config = require('nconf');
+  
   const i18n = require('i18n-x');
   const bodyParser = require('body-parser');
-  
-  config.file({file: __dirname + '/config.json'});
    
   const options = require(__dirname + '/options');
   const architectConfig = architect.loadConfig(__dirname + '/config.js');
@@ -51,7 +53,7 @@
     const httpServer = http.createServer(app);
     
     httpServer.listen(port, () => {
-      logger.info('Http server started');
+      logger.info(`Http server listening to port: ${port}`);
     });
     
     if (config.get('google-analytics')) {

@@ -9,10 +9,10 @@ html(lang='en')
     script(defer='defer', src='//cdn.metatavu.io/libs/jquery/3.2.1/jquery.min.js',type='text/javascript')
     script(defer='defer', src='//cdn.metatavu.io/libs/popper.js/1.11.0/popper.min.js',type='text/javascript')
     script(defer='defer', src='//cdn.metatavu.io/libs/jquery-ui/1.12.1/jquery-ui.min.js',type='text/javascript')
-    script(defer='defer', src='//cdn.metatavu.io/libs/bootstrap/4.0.0-beta-3/bootstrap.min.js',type='text/javascript')
+    script(defer='defer',src='//cdn.metatavu.io/libs/bootstrap/4.0.0-beta.3/js/bootstrap.min.js')
     script(defer='defer', src='//cdn.metatavu.io/libs/lodash/4.16.4/lodash.min.js', type='text/javascript')
     script(defer='defer',src='/js/common.min.js',type='text/javascript')
-    link(rel='stylesheet', href='//cdn.metatavu.io/libs/bootstrap/4.0.0-beta-3/bootstrap.min.css')
+    link(rel='stylesheet', href='//cdn.metatavu.io/libs/bootstrap/4.0.0-beta.3/css/bootstrap.min.css')
     link(rel='stylesheet', href='//cdn.metatavu.io/libs/font-awesome/4.7.0/css/font-awesome.min.css')
     link(rel='stylesheet', href='/css/layout.min.css')
     block custom-head
@@ -25,5 +25,10 @@ html(lang='en')
         ga('create', '#{googleAnalytics}', 'auto');
         ga('send', 'pageview');
   body
+    nav.navbar.navbar-expand-md.navbar-dark.bg-black.mb-4
+      .container
+        a.navbar-brand.mx-auto(href='https://www.lumme-energia.fi/')
+          img.top-logo(src="/gfx/lumme-logo.png")
+          | Uuden ajan energiayhtiö
     block body
   footer.footer
