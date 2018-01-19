@@ -3,6 +3,14 @@
 (() => {
   'use strict';
   
+  const WOBBLE_SPEED = 500;
+  const WOBBLE_ROTATE = 3;
+  const WOBBLE_LIFT = 5;
+  const WOBBLE_HAND_DELTA_X = 4;
+  const WOBBLE_HAND_X = 0;
+  const WOBBLE_HAND_Y = 0;
+  const WOBBLE_HAND_ROTATE = 0;
+  
   $.widget("custom.viksu", {
     
     options: {
@@ -16,14 +24,114 @@
             "command": "C",
             "elements": ["#elbowright", "#elbowright", "#wristjointright"]
           }
+        ],
+        "#legright": [
+          {
+            "command": "M",
+            "elements": ["#hipjointright"]
+          },
+          {
+            "command": "C",
+            "elements": ["#kneeright", "#kneeright", "#footrightjoint"]
+          }
+        ],
+        "#legleft": [
+          {
+            "command": "M",
+            "elements": ["#hipjointleft"]
+          },
+          {
+            "command": "C",
+            "elements": ["#kneeleft", "#kneeleft", "#footleftjoint"]
+          }
         ]
       },
       animated: {
+        "head": {
+          "selector": "#head",
+          "versions": {
+            "default": {
+              "rotate": "0",
+              "move": {
+                "x": 0,
+                "y": 0
+              }
+            },
+            "idleleft": {
+              "rotate": -WOBBLE_ROTATE,
+              "move": {
+                "x": 0,
+                "y": -WOBBLE_LIFT
+              }
+            },
+            "idleright": {
+              "rotate": WOBBLE_ROTATE,
+              "move": {
+                "x": 0,
+                "y": -WOBBLE_LIFT
+              }
+            }
+          }
+        },
+        "face": {
+          "selector": "#face",
+          "versions": {
+            "default": {
+              "rotate": "0",
+              "move": {
+                "x": 0,
+                "y": 0
+              }
+            },
+            "idleleft": {
+              "rotate": -WOBBLE_ROTATE,
+              "move": {
+                "x": 0,
+                "y": -WOBBLE_LIFT
+              }
+            },
+            "idleright": {
+              "rotate": WOBBLE_ROTATE,
+              "move": {
+                "x": 0,
+                "y": -WOBBLE_LIFT
+              }
+            }
+          }
+        },
+        "body": {
+          "selector": "#body",
+          "versions": {
+            "default": {
+              "move": {
+                "x": 0,
+                "y": 0
+              }
+            },
+            "idleleft": {
+              "rotate": -WOBBLE_ROTATE,
+              "move": {
+                "x": 0,
+                "y": -WOBBLE_LIFT
+              }
+            },
+            "idleright": {
+              "rotate": WOBBLE_ROTATE,
+              "move": {
+                "x": 0,
+                "y": -WOBBLE_LIFT
+              }
+            }
+          }
+        },
         "eyeleft": {
           "selector": "#eyeleft",
           "versions": {
             "lookright": {
-              selector: "#eyeleft-lookright"
+              "moveTo": "#eyeleft-lookright"
+            },
+            "lookup": {
+              "moveTo": "#eyeleft-up"
             }
           }
         },
@@ -31,7 +139,31 @@
           "selector": "#eyeright",
           "versions": {
             "lookright": {
-              selector: "#eyeright-lookright"
+              "moveTo": "#eyeright-lookright"
+            },
+            "lookup": {
+              "moveTo": "#eyeright-up"
+            }
+          }
+        },
+        "eyebrowleft": {
+          "selector": "#eyebrowleft",
+          "versions": {
+            "lookright": {
+              "moveTo": "#eyebrowleft-lookright"
+            },
+            "lookup": {
+              "moveTo": "#eyebrowleft-up"
+            }
+          }
+        },
+        "eyebrowright": {
+          "selector": "#eyebrowright",
+          "absolutePath": false,
+          "strokeOpacity": 0,
+          "versions": {
+            "lookup": {
+              "strokeOpacity": 1
             }
           }
         },
@@ -55,7 +187,28 @@
             "waveright": {
               "rotate": "0",
               "rotateAround": "#wristjointright"
-            }
+            }/**
+            "default": {
+              "rotate": WOBBLE_HAND_ROTATE,
+              "moveAbs": {
+                "x": WOBBLE_HAND_X,
+                "y": WOBBLE_HAND_Y
+              }
+            },
+            "idleright": {
+              "rotate": WOBBLE_HAND_ROTATE - 2,
+              "moveAbs": {
+                "x": WOBBLE_HAND_X - WOBBLE_HAND_DELTA_X,
+                "y": WOBBLE_HAND_Y
+              }
+            },
+            "idleleft": {
+              "rotate": WOBBLE_HAND_ROTATE + 2,
+              "moveAbs": {
+                "x": WOBBLE_HAND_X + WOBBLE_HAND_DELTA_X,
+                "y": WOBBLE_HAND_Y
+              }
+            }**/
           }
         }
       }
@@ -69,16 +222,21 @@
       
       _.forEach(this.options.animated, (options, name) => {
         const defaultElement = Snap.select(options.selector);
+        if (!defaultElement) {
+          console.log(options.selector);
+          return;
+        }
+        
         const versionDatas = {};
         versionDatas['default'] = {
-          path: this.getAbsolutePath(defaultElement)
+          path: options.absolutePath ? this.getAbsolutePath(defaultElement) : this.getPath(defaultElement)
         };
           
         _.forEach(options.versions, (versionOptions, version) => {
           if (versionOptions.selector) {
             const versionElement = Snap.select(versionOptions.selector);
             versionDatas[version] = {
-              path: this.getAbsolutePath(versionElement)
+              path: options.absolutePath ? this.getAbsolutePath(versionElement) : this.getPath(versionElement)
             };
           }
         });
@@ -93,10 +251,10 @@
     hands: function (where, duration) {
       switch (where) {
         case 'sides':
-          this.animate(['handright'], 'handonside', duration || 400);
+          return this.animate(['handright'], 'handonside', duration || 400);
         break;
         case 'waist':
-          this.animate(['handright'], 'handonwaist', duration || 400);
+          return this.animate(['handright'], 'handonwaist', duration || 400);
         break;
       }
     },
@@ -104,10 +262,13 @@
     look: function (where, duration) {
       switch (where) {
         case 'right':
-          this.animate(['eyeleft', 'eyeright'], 'lookright', duration || 400);        
+          return this.animate(['eyeleft', 'eyeright', 'eyebrowleft', 'eyebrowright'], 'lookright', duration || 400);        
+        break;
+        case 'up':
+          return this.animate(['eyeleft', 'eyeright', 'eyebrowleft', 'eyebrowright'], 'lookup', duration || 400);        
         break;
         default:
-          this.animate(['eyeleft', 'eyeright'], 'default', duration || 400);
+          return this.animate(['eyeleft', 'eyeright', 'eyebrowleft', 'eyebrowright'], 'default', duration || 400);
         break;
       }
     },
@@ -131,6 +292,24 @@
         });
     },
     
+    wobble: function () {
+      const parts = ['head', 'face', 'body', 'handright'];
+      
+      this.animate(parts, 'idleright', WOBBLE_SPEED)
+        .then(() => {
+          this.animate(parts, 'default', WOBBLE_SPEED)
+            .then(() => {
+              this.animate(parts, 'idleleft', WOBBLE_SPEED)
+                .then(() => {
+                  this.animate(parts, 'default', WOBBLE_SPEED)
+                    .then(() => {
+                      this.wobble();
+                    });
+                });
+            });
+        });
+    },
+    
     animateConnections: function (duration) {
       Snap.animate(0, 1, () => { this.updateConnections(); }, duration);
     },
@@ -143,7 +322,8 @@
           const easing = mina.easeout;
           const element = Snap.select(options.selector);
           const versionData = options.versionDatas[version];
-          const versionOptions = this.options.animated[name].versions[version];
+          const versionOptions = this.options.animated[name].versions[version] || {};
+          const strokeOpacity = versionOptions.strokeOpacity !== undefined ? versionOptions.strokeOpacity : this.options.animated[name].strokeOpacity;
 
           let transforms = [];
 
@@ -157,9 +337,11 @@
             const moveToBBox = moveToElement.getBBox();
             const elementBBox = element.getBBox();
             transforms.push(`T ${moveToBBox.cx - elementBBox.cx}, ${moveToBBox.cy - elementBBox.cy}`);
+          } else if (versionOptions.move !== undefined) {  
+            transforms.push(`t ${versionOptions.move.x}, ${versionOptions.move.y}`);
           }
-
-          if (transforms.length || versionData) {
+          
+          if (transforms.length || versionData || strokeOpacity) {
             const animateOptions = {};
 
             if (versionData && versionData.path) {
@@ -168,6 +350,10 @@
 
             if (transforms.length) {
               animateOptions.transform = transforms.join(' ');
+            }
+            
+            if (strokeOpacity !== undefined) {
+              animateOptions['stroke-opacity'] = strokeOpacity;
             }
 
             element.stop().animate(animateOptions, duration, () => {
@@ -201,12 +387,26 @@
       }).join(' ');
     },
     
+    getPath: function (element) {
+      const d = element.attr('d');
+      if (!d) {
+        return null;
+      }
+      
+      return d;
+    },
+    
     updateConnections: function () {
       _.forEach(this.options.derived, (parts, selector) => {
 
         const segments = parts.map((part) => {
-          const params = part.elements.map((element) => {
-            const center = this.getAbsoluteCenter(Snap.select(element));
+          const params = part.elements.map((elementSelector) => {
+            const element = Snap.select(elementSelector);
+            if (!element) {
+              console.log(`Could not find ${elementSelector}`);
+            }
+            
+            const center = this.getAbsoluteCenter(element);
             return [center.x, center.y].join(',');
           });
           
@@ -221,28 +421,27 @@
     getAbsoluteCenter: function (element) {
       const transform = element.transform();
       const bbox = element.getBBox();
-      const transformX = element.transform().globalMatrix.x(0, 0);
-      const transformY = element.transform().globalMatrix.y(0, 0);
       
       return {
         x: element.transform().globalMatrix.x(bbox.cx, bbox.cy),
         y: element.transform().globalMatrix.y(bbox.cx, bbox.cy)
       };
+    },
+    
+    getLayerOffsets: function () {
+      const bbox = Snap.select('#layer1').getBBox();
+      return {
+        x: bbox.cx(),
+        y: bbox.cy()
+      };
     }
+    
   });
   
   $(document).ready(() => {
     $(document).viksu();
-    
-    $(document).viksu('hands', 'sides', 0); 
-    
-    setTimeout(() => {
-       $(document).viksu('waveHand', 3, 300)
-         .then(() => {
-           $(document).viksu('look', 'right', 1000); 
-           $(document).viksu('hands', 'waist', 1000); 
-         });
-    }, 1000);
+    $(document).viksu('hands', 'waist', 0); 
+    $(document).viksu('wobble');
   });
   
 })();
