@@ -19,9 +19,12 @@
     
     getIndex(req, res) {
       const svgData = fs.readFileSync('lumme2.svg', { encoding: 'utf8' });
-      
+      const frameless = req.query.frameless ? req.query.frameless == 'true' : false;
+      const noHeader = req.query.noHeader ? req.query.noHeader == 'true' : false;
       res.render('index', {
-        svgData: svgData
+        svgData: svgData,
+        frameless: frameless,
+        noHeader: noHeader
       });
     }
     

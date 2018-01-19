@@ -25,10 +25,12 @@ html(lang='en')
         ga('create', '#{googleAnalytics}', 'auto');
         ga('send', 'pageview');
   body
-    nav.navbar.navbar-expand-md.navbar-dark.bg-black.mb-4
-      .container
-        a.navbar-brand.mx-auto(href='https://www.lumme-energia.fi/')
-          img.top-logo(src="/gfx/lumme-logo.png")
-          | Uuden ajan energiayhtiö
+    if !frameless
+      nav.navbar.navbar-expand-md.navbar-dark.bg-black.mb-4
+        .container
+          a.navbar-brand.mx-auto(href='https://www.lumme-energia.fi/')
+            img.top-logo(src="/gfx/lumme-logo.png")
+            | Uuden ajan energiayhtiö
     block body
-  footer.footer
+  if !frameless  
+    footer.footer

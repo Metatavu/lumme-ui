@@ -15,11 +15,13 @@ block custom-head
 block body
   // !=svgData
   main.container(role='main')
-    h1.main-heading.text-center Viksu, Lumme Energian sähköttäjä
+    if !noHeader
+      h1.main-heading.text-center Viksu, Lumme Energian sähköttäjä
     .row
-      .col-md-3
-        img.viksu-img(src="/gfx/viksu.svg")
-      .col-md
+      .col-lg-3
+        .viksu-container
+          !=svgData
+      .col-lg
         .chat-container
           .discussion-container
         .bot-typing-container
@@ -28,8 +30,8 @@ block body
             | Viksu kirjoittaa...
         .quick-responses
         .input-group.send-message-bar
-          input.form-control.user-text-input(type='text', placeholder="Kirjoita jotain")
-          input.form-control.user-date-input(type='text', style='display: none')
+          input.form-control.form-control-lg.user-text-input(type='text', placeholder="Kirjoita jotain")
+          input.form-control.form-control-lg.user-date-input(type='text', style='display: none')
           .input-group-append
-            button.btn.btn-lumme.send-message-btn(type='button') Lähetä
+            button.btn.btn-lumme.btn-lg.send-message-btn(type='button') Lähetä
           small.bot-hint-text.form-text.text-muted

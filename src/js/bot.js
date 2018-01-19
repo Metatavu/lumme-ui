@@ -1,4 +1,4 @@
-/* global moment */
+/* global moment, Promise */
 
 (() => {
   'use strict';
@@ -13,8 +13,7 @@
       this.element.on('click', '.send-message-btn', this._onSendMessageClick.bind(this));
       this.element.on('click', '.quick-message-btn', this._onQuickMessageClick.bind(this));
       $(document).on('keydown', this._onKeydown.bind(this));
-      
-      this.element.find('.bot-typing').hide();
+
       this.element.find('.user-date-input').flatpickr({
         "locale": "fi",
         "dateFormat": "d.m.Y",
@@ -43,8 +42,10 @@
       this.element.find('.bot-hint-text').text('');
       this.element.find('.quick-responses').empty();
       this.element.find('.discussion-container').append(
-        `<div class="user-response">
-          ${message}
+        `<div class="message-wrapper">
+          <div class="message user-response">
+            ${message}
+          </div>
         </div>`  
       );
 
@@ -81,7 +82,7 @@
       this.element.find('.user-date-input').hide();
 
       for (var i = 0; i < data.quickResponses.length; i++) {
-        this.element.find('.quick-responses').append(`<button class="btn btn-lumme btn-sm quick-message-btn">${data.quickResponses[i]}</button>`);
+        this.element.find('.quick-responses').append(`<button class="btn btn-lumme quick-message-btn">${data.quickResponses[i]}</button>`);
       }
 
       const parsedResponse = $('<pre>').html(data.response);
@@ -116,13 +117,55 @@
 
       this.element.find('.bot-hint-text').text(data.hint || '');
 
-      this.element.find('.discussion-container').append(
-        `<div class="bot-response">
-          ${data.response}
-        </div>`  
-      );
+      const botMessage = $(
+        `<div class="message-wrapper">
+           <div class="message bot-response">
+            ${data.response}
+          </div>
+        </div>`);
+          
+      this.element.find('.discussion-container').append(botMessage);
 
       this.element.find('.chat-container')[0].scrollTop = this.element.find('.chat-container')[0].scrollHeight;
+      this._processBotAnimations(botMessage).then(() => { });
+    },
+    
+    _processBotAnimations: function(response) {
+      const animationInputs = response.find('input[name="bot-animation"]');
+      let animationPromise = Promise.resolve();
+      animationInputs.each((index, animationInput) => {
+        const animation = $(animationInput).val();
+        let duration = 500;
+        switch (animation) {
+          case 'wave':
+            const times = $(animationInput).attr('data-times') ? parseInt($(animationInput).attr('data-times')) : 1;
+            duration = $(animationInput).attr('data-duration') ? parseInt($(animationInput).attr('data-duration')) : 500;
+            animationPromise = animationPromise.then(() => { 
+              return $(document).viksu('waveHand', times, duration).then(() => {
+                return $(document).viksu('hands', 'waist', 0);
+              }); 
+            });
+          break;
+          case 'look':
+            const where = $(animationInput).attr('data-where');
+            duration = $(animationInput).attr('data-duration') ? parseInt($(animationInput).attr('data-duration')) : 500;
+            animationPromise = animationPromise.then(() => { 
+              return $(document).viksu('look', where, duration).then(() => {
+                $(document).viksu('look', 'default', 200);
+              }); 
+            });
+          break;            
+          default:
+            console.log(`Unknown animation ${animation}`);
+          break;
+        }
+      });
+      
+      return animationPromise;
+    },
+    
+    _processBotAnimation: function(animationInput) {
+      
     },
     
     _onSendMessageClick: function(event) {

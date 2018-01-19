@@ -27,6 +27,10 @@
   @include font-h1();
   color: $heading-grey;
   font-size: 60px;
+  
+  @media (max-width: 991px) { 
+    font-size: 32px;
+  }  
 }
 
 .bot-hint-text {
@@ -47,50 +51,80 @@
   }
 }
 
-.bot-response {
+.message {
   padding: 20px;
   min-height: 40px;
   margin-top: 20px;
   margin-bottom: 20px;
   position: relative;
-  background: #ffffff;
   border-radius: .4em;
+
+  @media (max-width: 900px) { 
+    max-width: 95%
+  }  
+
+  @media (min-width: 901px) and (max-width: 1024px) {
+    max-width: 85%
+  }
+
+  @media (min-width: 1025px) and (max-width: 1300px) {
+    max-width: 75%
+  }
+
+  @media (min-width: 1301px) {
+    max-width: 65%;
+  }
   
-  &::after { 
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    width: 0;
-    height: 0;
-    border: 20px solid transparent;
-    border-right-color: #ffffff;
-    border-left: 0;
-    margin-top: -20px;
-    margin-left: -20px;
+  &.bot-response {
+    float: left;
+    background: $bot-message-color;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 0;
+      height: 0;
+      border: 20px solid transparent;
+      border-right-color: $bot-message-color;
+      border-left: 0;
+      border-top: 0;
+      margin-top: -10px;
+      margin-left: -20px;
+    }
+  }
+  
+  &.user-response {
+    float: right;
+    background: $user-message-color;
+    
+    &::after { 
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      width: 0;
+      height: 0;
+      border: 20px solid transparent;
+      border-left-color: $user-message-color;
+      border-right: 0;
+      border-top: 0;
+      margin-top: -10px;
+      margin-right: -20px;
+    }
   }
 }
 
-.user-response {
-  padding: 20px;
-  min-height: 40px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  position: relative;
-  background: #ffffff;
-  border-radius: .4em;
+.message-wrapper {
   
-  &::after { 
+  &::after {
     content: '';
-    position: absolute;
-    right: 0;
-    top: 50%;
-    width: 0;
-    height: 0;
-    border: 20px solid transparent;
-    border-left-color: #ffffff;
-    border-right: 0;
-    margin-top: -20px;
-    margin-right: -20px;
+    display: table;
+    clear: both;
   }
+}
+
+.user-text-input,.user-date-input {
+  border-radius: 0;
 }

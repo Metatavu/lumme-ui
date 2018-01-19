@@ -5,7 +5,6 @@
   
   const config = require('nconf');
   config.file({file: __dirname + '/config.json'});
-  console.log(config.get('metamind'));
   
   const architect = require('architect');
   const _ = require('lodash');
