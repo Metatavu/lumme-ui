@@ -1,5 +1,5 @@
 {
-  "name": "lumme-ui",
+  "name": "lumme-metamind-ui",
   "description": "Web user interface for Lumme chat bot",
   "version": "0.0.1",
   "main": "app.js",
