@@ -27,7 +27,7 @@
     sendMessage: function(text) {
       const disabled = this.element.find('.send-message-btn').attr('disabled');
       const message = text || this.element.find('.user-text-input').val() || this.element.find('.user-date-input').val();
-
+      
       if (!message.trim()) {
         return;
       }
@@ -36,6 +36,7 @@
         return;
       }
 
+      $(document).viksu('look', 'right', 50);
       this.element.find('.bot-typing').show();
       this.element.find('.user-text-input').val('');
       this.element.find('.send-message-btn').attr('disabled', 'disabled');
@@ -75,6 +76,7 @@
     _onBotResponse: function(data) {
       this.options.sessionId = data.sessionId;
 
+      $(document).viksu('look', 'straight', 30);
       this.element.find('.bot-typing').hide();
       this.element.find('.send-message-btn').removeAttr('disabled');
       this.element.find('.user-text-input').val('');

@@ -46,6 +46,7 @@
           }
         ]
       },
+      
       animated: {
         "head": {
           "selector": "#head",
@@ -101,6 +102,7 @@
         },
         "body": {
           "selector": "#body",
+          "derived": ["#armright", "#legright", "#legleft"],
           "versions": {
             "default": {
               "move": {
@@ -169,6 +171,7 @@
         },
         "handright": {
           "selector": "#handright",
+          "derived": ["#armright"],
           "versions": {
             "handonwaist": {
               "rotate": 180,
@@ -216,9 +219,7 @@
     
     _create : function() {
       this.svg = document.getElementById("Layer_1");
-      this.animated = {
-        
-      };
+      this.animated = { };
       
       _.forEach(this.options.animated, (options, name) => {
         const defaultElement = Snap.select(options.selector);
@@ -310,8 +311,19 @@
         });
     },
     
-    animateConnections: function (duration) {
-      Snap.animate(0, 1, () => { this.updateConnections(); }, duration);
+    animateConnections: function (derivedSelectors, duration) {
+      if (derivedSelectors && derivedSelectors.length) {
+        const derived = {};    
+        derivedSelectors.forEach((derivedSelector) => {
+          derived[derivedSelector] = this.options.derived[derivedSelector];
+        });
+            
+        Snap.animate(0, 100, (progress) => { 
+          if (progress % 2 == 1) {
+            this.updateConnections(derived);
+          }
+        }, duration);
+      }
     },
     
     animate: function (names, version, animationDuration) {
@@ -356,10 +368,11 @@
               animateOptions['stroke-opacity'] = strokeOpacity;
             }
 
-            element.stop().animate(animateOptions, duration, () => {
+            element.animate(animateOptions, duration, () => {
               resolve();
             });
-            this.animateConnections(duration);
+            
+            this.animateConnections(this.options.animated[name].derived, duration);
           }
         });        
       });
@@ -397,8 +410,8 @@
       return d;
     },
     
-    updateConnections: function () {
-      _.forEach(this.options.derived, (parts, selector) => {
+    updateConnections: function (derived) {
+      _.forEach(derived, (parts, selector) => {
 
         const segments = parts.map((part) => {
           const params = part.elements.map((elementSelector) => {
@@ -443,7 +456,8 @@
   
   $(document).ready(() => {
     $(document).viksu();
-    $(document).viksu('hands', 'waist', 0); 
+    $(document).viksu('hands', 'waist', 0);
+    $(document).viksu('look', 'right', 0); 
     $(document).viksu('wobble');
   });
   
