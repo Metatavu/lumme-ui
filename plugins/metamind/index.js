@@ -12,17 +12,23 @@
     constructor(logger) {
       this.sessionsApi = new MetamindClient.SessionsApi();
       this.messagesApi = new MetamindClient.MessagesApi();
-      this.apiUrl = config.get('metamind:apiUrl'); //options.apiUrl;
-      this.apiKey = config.get('metamind:apiKey'); //options.apiKey;
-      this.story = config.get('metamind:story');  //options.story;
-      this.locale = config.get('metamind:locale'); // 'fi';
-      this.timeZone = config.get('metamind:timeZone'); // 'Europe/Helsinki';
+      this.apiUrl = config.get('metamind:apiUrl');
+      this.story = config.get('metamind:story');
+      this.locale = config.get('metamind:locale');
+      this.timeZone = config.get('metamind:timeZone');
       this.logger = logger;
       this.initClient();
     }
 
     initClient() {
       MetamindClient.ApiClient.instance.basePath = this.apiUrl;
+      MetamindClient.ApiClient.instance.authentications = {
+        'basicAuth': {
+          type: 'basic',
+          username: config.get('metamind:clientId'),
+          password: config.get('metamind:clientSecret')
+        }
+      };
     }
 
     resolveSessionId(req) {
