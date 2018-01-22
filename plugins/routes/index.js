@@ -9,6 +9,7 @@
   const moment = require('moment');
   const config = require('nconf');
   const request = require('request');
+  const useragent = require('useragent');
   
   class Routes {
     
@@ -18,13 +19,22 @@
     }
     
     getIndex(req, res) {
-      const svgData = fs.readFileSync(__dirname+'/../../lumme2.svg', { encoding: 'utf8' });
-      const frameless = req.query.frameless ? req.query.frameless == 'true' : false;
-      const noHeader = req.query.noHeader ? req.query.noHeader == 'true' : false;
-      res.render('index', {
-        svgData: svgData,
-        frameless: frameless,
-        noHeader: noHeader
+      fs.readFile(__dirname+'/../../lumme.svg', 'utf8', (err, svgData) => {
+        if (err) {
+          this.logger.error(err);
+          res.status(500).send(err);
+          return;
+        }
+        
+        const userAgent = useragent.is(req.headers['user-agent']);        
+        const frameless = req.query.frameless ? req.query.frameless === 'true' : false;
+        const noHeader = req.query.noHeader ? req.query.noHeader === 'true' : false;
+        res.render('index', {
+          svgData: svgData,
+          frameless: frameless,
+          noHeader: noHeader,
+          useSvg: !userAgent.ie
+        });
       });
     }
     

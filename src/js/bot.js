@@ -36,7 +36,7 @@
         return;
       }
 
-      $(document).viksu('look', 'right', 50);
+      $(document).viksu('look', 'right', 300);
       this.element.find('.bot-typing').show();
       this.element.find('.user-text-input').val('');
       this.element.find('.send-message-btn').attr('disabled', 'disabled');
@@ -75,8 +75,7 @@
     
     _onBotResponse: function(data) {
       this.options.sessionId = data.sessionId;
-
-      $(document).viksu('look', 'straight', 30);
+      
       this.element.find('.bot-typing').hide();
       this.element.find('.send-message-btn').removeAttr('disabled');
       this.element.find('.user-text-input').val('');
@@ -133,9 +132,13 @@
     },
     
     _processBotAnimations: function(response) {
+      let lookDefault = true;
+      
       const animationInputs = response.find('input[name="bot-animation"]');
       let animationPromise = Promise.resolve();
       animationInputs.each((index, animationInput) => {
+        let where;
+      
         const animation = $(animationInput).val();
         let duration = 500;
         switch (animation) {
@@ -149,19 +152,29 @@
             });
           break;
           case 'look':
-            const where = $(animationInput).attr('data-where');
+            lookDefault = false;
+            where = $(animationInput).attr('data-where');
             duration = $(animationInput).attr('data-duration') ? parseInt($(animationInput).attr('data-duration')) : 500;
             animationPromise = animationPromise.then(() => { 
               return $(document).viksu('look', where, duration).then(() => {
-                return $(document).viksu('look', 'default', 200);
+                return new Promise((resolve) => {
+                  setTimeout(() => {
+                    $(document).viksu('look', 'default', 500);
+                    resolve();
+                  }, 1000);
+                });
               }); 
             });
-          break;            
+          break;        
           default:
             console.log(`Unknown animation ${animation}`);
           break;
         }
       });
+      
+      if (lookDefault) {
+        $(document).viksu('look', 'default', 300);
+      }
       
       return animationPromise;
     },
