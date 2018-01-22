@@ -1,4 +1,3 @@
 {
-  "presets": ["env"],
-  "plugins": ["es6-promise"]
+  "presets": ["env"]
 }

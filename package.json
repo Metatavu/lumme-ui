@@ -1,7 +1,7 @@
 {
   "name": "lumme-metamind-ui",
   "description": "Web user interface for Lumme chat bot",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "app.js",
   "author": {
     "name": "Metatavu",
@@ -17,16 +17,16 @@
     "express": "4.16.2",
     "i18n-x": "^0.1.5",
     "lodash": "^4.17.4",
-    "metamind-client": "0.0.24",
+    "metamind-client": "0.0.26",
     "moment": "2.20.1",
     "nconf": "0.10.0",
     "pug": "^2.0.0-rc.4",
     "request": "2.83.0",
-    "shady-worker": "0.0.4"
+    "shady-worker": "0.0.4",
+    "useragent": "^2.2.1"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
-    "babel-plugin-es6-promise": "^1.1.1",
     "babel-preset-env": "^1.6.1",
     "babel-preset-es2015": "^6.24.1",
     "grunt": "^1.0.1",
