@@ -129,6 +129,12 @@
         "eyeleft": {
           "selector": "#eyeleft",
           "versions": {
+            "default": {
+              "move": {
+                "x": 0,
+                "y": 0
+              }
+            },
             "lookright": {
               "moveTo": "#eyeleft-lookright"
             },
@@ -140,6 +146,12 @@
         "eyeright": {
           "selector": "#eyeright",
           "versions": {
+            "default": {
+              "move": {
+                "x": 0,
+                "y": 0
+              }
+            },
             "lookright": {
               "moveTo": "#eyeright-lookright"
             },
@@ -151,6 +163,12 @@
         "eyebrowleft": {
           "selector": "#eyebrowleft",
           "versions": {
+            "default": {
+              "move": {
+                "x": 0,
+                "y": 0
+              }
+            },
             "lookright": {
               "moveTo": "#eyebrowleft-lookright"
             },
@@ -174,14 +192,16 @@
           "derived": ["#armright"],
           "versions": {
             "handonwaist": {
-              "rotate": 180,
+              "rotate": 200,
               "rotateAround": "#wristjointright",
-              "moveTo": "#wristjointright-handonwaist"
+              "moveTo": "#wristjointright-handonwaist",
+              "cache": ["#wristjointright"]
             },
             "handonside": {
               "rotate": 70,
               "rotateAround": "#wristjointright",
-              "moveTo": "#wristjointright-handonside"
+              "moveTo": "#wristjointright-handonside",
+              "cache": ["#wristjointright"]
             },
             "waveleft": {
               "rotate": "-20",
@@ -190,28 +210,7 @@
             "waveright": {
               "rotate": "0",
               "rotateAround": "#wristjointright"
-            }/**
-            "default": {
-              "rotate": WOBBLE_HAND_ROTATE,
-              "moveAbs": {
-                "x": WOBBLE_HAND_X,
-                "y": WOBBLE_HAND_Y
-              }
-            },
-            "idleright": {
-              "rotate": WOBBLE_HAND_ROTATE - 2,
-              "moveAbs": {
-                "x": WOBBLE_HAND_X - WOBBLE_HAND_DELTA_X,
-                "y": WOBBLE_HAND_Y
-              }
-            },
-            "idleleft": {
-              "rotate": WOBBLE_HAND_ROTATE + 2,
-              "moveAbs": {
-                "x": WOBBLE_HAND_X + WOBBLE_HAND_DELTA_X,
-                "y": WOBBLE_HAND_Y
-              }
-            }**/
+            }
           }
         }
       }
@@ -220,6 +219,11 @@
     _create : function() {
       this.svg = document.getElementById("Layer_1");
       this.animated = { };
+      
+      ["#shoulderright", "#kneeright", "#footrightjoint", "#kneeleft", "#footleftjoint", "#hipjointright", "#hipjointleft", "#elbowright", "#wristjointright"].forEach((selector) => {
+        this.cachePosition(selector);
+      });
+              
       
       _.forEach(this.options.animated, (options, name) => {
         const defaultElement = Snap.select(options.selector);
@@ -317,12 +321,18 @@
         derivedSelectors.forEach((derivedSelector) => {
           derived[derivedSelector] = this.options.derived[derivedSelector];
         });
-            
-        Snap.animate(0, 1000, (progress) => {
-          if (progress % 1 == 0) {
-            this.updateConnections(derived);
+        
+        var start = null;
+        
+        const step = (timestamp) => {
+          if (!start) start = timestamp;
+          this.updateConnections(derived);
+          if (timestamp - start < duration) {
+            window.requestAnimationFrame(step);
           }
-        }, duration);
+        }
+        
+        window.requestAnimationFrame(step);
       }
     },
     
@@ -353,6 +363,12 @@
             transforms.push(`t ${versionOptions.move.x}, ${versionOptions.move.y}`);
           }
           
+          if (versionOptions.cache) {
+            versionOptions.cache.forEach((selector) => {
+              this.clearPositionCache(selector);
+            });
+          }
+          
           if (transforms.length || versionData || strokeOpacity) {
             const animateOptions = {};
 
@@ -367,8 +383,14 @@
             if (strokeOpacity !== undefined) {
               animateOptions['stroke-opacity'] = strokeOpacity;
             }
-
+            
             element.animate(animateOptions, duration, () => {
+              if (versionOptions.cache) {
+                versionOptions.cache.forEach((selector) => {
+                  this.cachePosition(selector);
+                });
+              }
+              
               resolve();
             });
             
@@ -432,7 +454,39 @@
       });
     },
     
+    clearPositionCache: function(selector) {
+      const element = Snap.select(selector);
+      element.attr({
+        'data-abs-x': '',
+        'data-abs-y': ''
+      });
+    },
+    
+    cachePosition: function(selector) {
+      const element = Snap.select(selector);
+      const center = this.resolveAbsoluteCenter(element);
+      
+      element.attr({
+        'data-abs-x': center.x,
+        'data-abs-y': center.y
+      });
+    },
+    
     getAbsoluteCenter: function (element) {
+      const x = element.attr('data-abs-x');
+      const y = element.attr('data-abs-y');
+      
+      if (x && y) {
+        return {
+          x: parseFloat(x),
+          y: parseFloat(y)
+        };
+      }
+      
+      return this.resolveAbsoluteCenter(element);
+    },
+    
+    resolveAbsoluteCenter: function (element) {
       const transform = element.transform();
       const bbox = element.getBBox();
       const layerOffset = this.getLayerOffset();
@@ -456,7 +510,6 @@
   
   $(document).ready(() => {
     $(document).viksu();
-    $(document).viksu('hands', 'waist', 0);
     $(document).viksu('look', 'right', 0); 
     $(document).viksu('wobble');
   });
