@@ -6,7 +6,8 @@
   $.widget("custom.metamind", {
     
     options: {
-      sessionId: null
+      sessionId: null,
+      previousMessage: ''
     },
     
     _create : function() {
@@ -55,6 +56,8 @@
     },
     
     _postMessage: function(message) {
+      this.options.previousMessage = message;
+
        $.ajax({
          method: 'POST',
          url: this._createUrl(),
@@ -70,7 +73,15 @@
     },
     
     _onBotError: function(jqXHR, textStatus, errorThrown) {
-      alert('Error communicating with bot');
+      new Noty({
+        text: '<b>Viestin lähettämisessä tapahtui virhe.</b><br/>Odota hetki niin yritän uudelleen.',
+        type: 'error',
+        timeout: 3000
+      }).show();
+      
+      setTimeout(() => {
+        this._postMessage(this.options.previousMessage);
+      }, 3000);
     },
     
     _onBotResponse: function(data) {
