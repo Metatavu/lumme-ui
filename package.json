@@ -23,7 +23,7 @@
     "pug": "^2.0.0-rc.4",
     "request": "2.83.0",
     "shady-worker": "0.0.4",
-    "useragent": "^2.2.1"
+    "ua-parser-js": "^0.7.17"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

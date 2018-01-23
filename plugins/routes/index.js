@@ -9,8 +9,8 @@
   const moment = require('moment');
   const config = require('nconf');
   const request = require('request');
-  const useragent = require('useragent');
-  
+  const uaParser = require('ua-parser-js');
+
   class Routes {
     
     constructor (logger, metamind) {
@@ -26,14 +26,15 @@
           return;
         }
         
-        const userAgent = useragent.is(req.headers['user-agent']);        
+        const ua = uaParser(req.headers['user-agent']);
+        const useSvg = req.query.useSvg !== 'false' && ua && ua.browser && ua.browser.name !== "Edge" && ua.browser.name !== "IE";
         const frameless = req.query.frameless ? req.query.frameless === 'true' : false;
         const noHeader = req.query.noHeader ? req.query.noHeader === 'true' : false;
         res.render('index', {
           svgData: svgData,
           frameless: frameless,
           noHeader: noHeader,
-          useSvg: !userAgent.ie
+          useSvg: useSvg
         });
       });
     }
