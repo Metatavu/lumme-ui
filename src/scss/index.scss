@@ -6,19 +6,51 @@
 .viksu-img {
   width: 100%;
 }
+
 .chat-container {
-  max-height: 400px;
+  max-height: calc(100vh - 190px);
   overflow-y: scroll;
   height: 100%;
   width: 100%;
+
+  @media (min-width: 768px) { 
+    max-height: calc(100vh - 290px);
+  }
+  
+  @media (min-width: 1200px) { 
+    max-height: 400px;
+  }
   
   .discussion-container {
     padding: 35px;
+    @media (max-width: 991.98px) {
+      padding-top: 55px;
+      padding-bottom: 100px;
+    }
   }
 }
-.send-message-bar {
-  padding-top: 20px;
-  padding-bottom: 20px;
+
+.bot-controls {
+  background-color: $background;
+
+  @media (max-width: 991.98px) { 
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    right: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  
+  .send-message-bar {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    
+    .bot-hint-text {
+      min-height: 20px;
+    }
+  }
 }
 
 .main-heading {
@@ -28,8 +60,9 @@
   color: $heading-grey;
   font-size: 60px;
   
-  @media (max-width: 991px) { 
+  @media (max-width: 991.98px) { 
     font-size: 32px;
+    margin-bottom: 25px;
   }  
 }
 
@@ -43,9 +76,6 @@
 }
 
 .bot-typing-container {
-  height: 40px;
-  width: 100%;
-
   img {
     height: 40px;
   }
@@ -127,4 +157,23 @@
 
 .user-text-input,.user-date-input {
   border-radius: 0;
+}
+
+.viksu-container {
+  
+  @media (max-width: 991.98px) {
+    position: fixed;
+    top: -70px;
+    left: -40px;
+    z-index: 1040;
+    transform: scale(0.7);
+  }
+  
+  @media (max-width: 767.98px) {
+    position: fixed;
+    top: -120px;
+    left: -70px;
+    z-index: 1040;
+    transform: scale(0.45);
+  }
 }

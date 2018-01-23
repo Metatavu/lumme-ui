@@ -5,12 +5,35 @@
 
 body {
   background-color: $background;
+  padding-top: 50px;
+  
+  @media (min-width: 992px) {
+    padding-top: 0;
+  }
 }
+
+.top-nav {
+  @media (max-width: 991.98px) {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1030;   
+  }
+}
+
 .top-logo {
   padding-left: 15px;
   padding-right: 15px;
   padding-top: 25px;
   padding-bottom: 30px;
+
+  @media (max-width: 991.98px) {
+    max-height: 50px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }  
+  
 }
 .bg-black {
   background-color: $black;

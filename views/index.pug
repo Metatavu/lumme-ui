@@ -15,7 +15,7 @@ block custom-head
 block body
   main.container(role='main')
     if !noHeader
-      h1.main-heading.text-center Viksu, Lumme Energian sähköttäjä
+      h1.main-heading.text-center.d-none.d-md-block Viksu, Lumme Energian sähköttäjä
     .row
       .col-lg-3
         .viksu-container.text-center
@@ -23,17 +23,18 @@ block body
             !=svgData
           else
             img(src='//cdn.metatavu.io/assets/lumme/viksu.gif')
-      .col-lg
+      .col-lg.chat-controls
         .chat-container
           .discussion-container
-        .bot-typing-container
-          .bot-typing.float-right
-            img(src='gfx/typing.svg')
-            | Viksu kirjoittaa...
-        .quick-responses
-        .input-group.send-message-bar
-          input.form-control.form-control-lg.user-text-input(type='text', placeholder="Kirjoita vastauksesi")
-          input.form-control.form-control-lg.user-date-input(type='text', style='display: none')
-          .input-group-append
-            button.btn.btn-lumme.btn-lg.send-message-btn(type='button') Lähetä
-          small.bot-hint-text.form-text.text-muted
+        .bot-controls
+          .bot-typing-container
+            .bot-typing.float-right
+              img(src='gfx/typing.svg')
+              | Viksu kirjoittaa...
+          .quick-responses
+          .input-group.send-message-bar
+            input.form-control.form-control-lg.user-text-input(type='text', placeholder="Kirjoita vastauksesi")
+            input.form-control.form-control-lg.user-date-input(type='text', style='display: none')
+            .input-group-append
+              button.btn.btn-lumme.btn-lg.send-message-btn(type='button') Lähetä
+            small.bot-hint-text.form-text.text-muted
