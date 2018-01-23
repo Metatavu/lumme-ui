@@ -6,6 +6,7 @@
 
   const config = require('nconf');
   const MetamindClient = require('metamind-client');
+  const _ = require('lodash');
   
   class Metamind {
 
@@ -36,10 +37,10 @@
     }
     
     resolveVisitor(req) {
-     return req.headers['x-forwarded-for'] || 
+     return _.truncate(`${req.headers['x-forwarded-for'] || 
        req.connection.remoteAddress || 
        req.socket.remoteAddress ||
-       (req.connection.socket ? req.connection.socket.remoteAddress : 'Unknown');
+       (req.connection.socket ? req.connection.socket.remoteAddress : 'Unknown')} / ${req.headers['user-agent']}`, {'length': 180 });
     }
 
     async sendMessage(req, res) {
