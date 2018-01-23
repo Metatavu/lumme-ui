@@ -31,11 +31,11 @@ html(lang='en')
         ga('send', 'pageview');
   body
     if !frameless
-      nav.navbar.navbar-expand-md.navbar-dark.bg-black.mb-4
+      nav.top-nav.navbar.navbar-expand-md.navbar-dark.bg-black.mb-4
         .container
           a.navbar-brand.mx-auto(href='https://www.lumme-energia.fi/')
             img.top-logo(src="/gfx/lumme-logo.png")
-            | Uuden ajan energiayhtiö
+            span.d-none.d-sm-inline Uuden ajan energiayhtiö
     block body
   if !frameless  
     footer.footer
