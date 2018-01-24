@@ -339,7 +339,7 @@
       return new Promise((resolve) => {
         if (!this.svg) {
           setTimeout(() => {
-            Promise.resolve();
+            resolve();
           }, animationDuration);
 
           return;
