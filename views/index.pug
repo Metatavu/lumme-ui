@@ -18,13 +18,13 @@ block body
       h1.main-heading.text-center.d-none.d-md-block Viksu, Lumme Energian sähköttäjä
     .row
       .col-lg-3
-        .viksu-container.text-center
+        .viksu-container.text-center(class=!useSvg ? 'no-svg' : '')
           if useSvg
             !=svgData
           else
             img(src='//cdn.metatavu.io/assets/lumme/viksu.gif')
       .col-lg.chat-controls
-        .chat-container
+        .chat-container(class=!useSvg ? 'no-svg' : '')
           .discussion-container
         .bot-controls
           .bot-typing-container

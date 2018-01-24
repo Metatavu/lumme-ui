@@ -12,6 +12,10 @@
   overflow-y: scroll;
   height: 100%;
   width: 100%;
+  
+  &.no-svg {
+    padding-left: 40px;
+  }
 
   @media (min-width: 768px) { 
     max-height: calc(100vh - 290px);
@@ -19,6 +23,10 @@
   
   @media (min-width: 1200px) { 
     max-height: 400px;
+    
+    &.no-svg {
+      padding-left: 0;
+    }
   }
   
   .discussion-container {
@@ -160,13 +168,22 @@
 }
 
 .viksu-container {
-  
   @media (max-width: 991.98px) {
     position: fixed;
     top: -70px;
     left: -40px;
     z-index: 1040;
     transform: scale(0.7);
+    
+    &.no-svg {
+      z-index: 0;
+    }
+    
+    img {
+      margin-left: 50px;
+      margin-top: 180px;
+      max-width: 150px;
+    }
   }
   
   @media (max-width: 767.98px) {
@@ -176,4 +193,5 @@
     z-index: 1040;
     transform: scale(0.45);
   }
+  
 }

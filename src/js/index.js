@@ -228,7 +228,6 @@
       _.forEach(this.options.animated, (options, name) => {
         const defaultElement = Snap.select(options.selector);
         if (!defaultElement) {
-          console.log(options.selector);
           return;
         }
         
@@ -338,6 +337,14 @@
     
     animate: function (names, version, animationDuration) {
       return new Promise((resolve) => {
+        if (!this.svg) {
+          setTimeout(() => {
+            Promise.resolve();
+          }, animationDuration);
+
+          return;
+        }
+        
         (_.isArray(names) ? names : [names]).forEach((name) => {
           const options = this.animated[name];
           const duration = animationDuration || 500;
@@ -463,6 +470,10 @@
     },
     
     cachePosition: function(selector) {
+      if (!this.svg) {
+        return;
+      }
+      
       const element = Snap.select(selector);
       const center = this.resolveAbsoluteCenter(element);
       
