@@ -26,6 +26,7 @@
           return;
         }
         
+        const googleAnalytics = config.get('googleAnalytics') || null; 
         const ua = uaParser(req.headers['user-agent']);
         const useSvg = req.query.useSvg !== 'false' && ua && ua.browser && ua.browser.name !== "Edge" && ua.browser.name !== "IE";
         const frameless = req.query.frameless ? req.query.frameless === 'true' : false;
@@ -34,7 +35,8 @@
           svgData: svgData,
           frameless: frameless,
           noHeader: noHeader,
-          useSvg: useSvg
+          useSvg: useSvg,
+          googleAnalytics: googleAnalytics
         });
       });
     }
