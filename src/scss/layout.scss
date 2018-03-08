@@ -10,6 +10,10 @@ body {
   @media (min-width: 992px) {
     padding-top: 0;
   }
+  
+  #livechat-compact-container {
+    display: none !important;
+  }
 }
 
 .top-nav {
