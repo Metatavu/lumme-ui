@@ -4,7 +4,6 @@
 (() => {
   'use strict';
 
-  const config = require('nconf');
   const MetamindClient = require('metamind-client');
   const _ = require('lodash');
   
@@ -13,10 +12,10 @@
     constructor(logger) {
       this.sessionsApi = new MetamindClient.SessionsApi();
       this.messagesApi = new MetamindClient.MessagesApi();
-      this.apiUrl = config.get('metamind:apiUrl');
-      this.story = config.get('metamind:story');
-      this.locale = config.get('metamind:locale');
-      this.timeZone = config.get('metamind:timeZone');
+      this.apiUrl = process.env.METAMIND_APIURL;
+      this.story = process.env.METAMIND_STORY;
+      this.locale = process.env.METAMIND_LOCALE;
+      this.timeZone = process.env.METAMIND_TIMEZONE;
       this.logger = logger;
       this.initClient();
     }
@@ -26,8 +25,8 @@
       MetamindClient.ApiClient.instance.authentications = {
         'basicAuth': {
           type: 'basic',
-          username: config.get('metamind:clientId'),
-          password: config.get('metamind:clientSecret')
+          username: process.env.METAMIND_CLIENTID,
+          password: process.env.METAMIND_CLIENTSECRET
         }
       };
     }

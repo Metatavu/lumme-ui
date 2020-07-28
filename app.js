@@ -3,20 +3,14 @@
 (() => {
   'use strict';
   
-  const config = require('nconf');
-  config.file({file: __dirname + '/config.json'});
-  
   const architect = require('architect');
-  const _ = require('lodash');
   const http = require('http');
-  const util = require('util');
   const path = require('path');
   const express = require('express');
-  const request = require('request');
   
   const i18n = require('i18n-x');
   const bodyParser = require('body-parser');
-   
+
   const options = require(__dirname + '/options');
   const architectConfig = architect.loadConfig(__dirname + '/config.js');
   
@@ -40,13 +34,6 @@
     const routes = architectApp.getService('lumme-ui-routes');
     const logger = architectApp.getService('logger');
     const port = options.getOption('port');
-    const host = options.getOption('host');
-
-    if (!config.get('standalone')) {
-      const shadyWorker = architectApp.getService('shady-worker');
-      const serverGroup = config.get("server-group");
-      const workerId = shadyWorker.start(serverGroup, port, host);
-    }
 
     const app = express();
     const httpServer = http.createServer(app);
@@ -55,8 +42,8 @@
       logger.info(`Http server listening to port: ${port}`);
     });
     
-    if (config.get('google-analytics')) {
-      app.locals.googleAnalytics = config.get('google-analytics');
+    if (process.env.GOOGLE_ANALYTICS) {
+      app.locals.googleAnalytics = process.env.GOOGLE_ANALYTICS;
     }
     
     app.use(bodyParser.json());
