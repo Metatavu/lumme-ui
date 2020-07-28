@@ -35,6 +35,14 @@
       if (this.options['help']) {
         return 'help';
       }
+
+      if (!this.options['host']) {
+        this.options['host'] = 'localhost';
+      }
+
+      if (!this.options['port']) {
+        this.options['port'] = 3000;
+      }
       
       const required = ['port', 'host'];  
       
