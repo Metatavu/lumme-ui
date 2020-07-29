@@ -9,7 +9,7 @@ RUN npm install -g sass
 RUN npm install
 
 COPY . .
-
+RUN mkdir src/templates
 RUN grunt
 
 EXPOSE 3000
