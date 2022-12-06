@@ -14,7 +14,7 @@
     "body-parser": "^1.18.2",
     "command-line-args": "^4.0.7",
     "command-line-usage": "^4.0.2",
-    "express": "4.16.2",
+    "express": "4.18.2",
     "i18n-x": "^0.1.5",
     "lodash": "^4.17.4",
     "metamind-client": "0.0.26",
